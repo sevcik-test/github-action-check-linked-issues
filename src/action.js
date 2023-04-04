@@ -17,7 +17,7 @@ async function run() {
   toolkit.logRepoWarning();
 
   core.info(`
-    *** ACTION RUN - START ***
+    *** ACTION RUN - START #1 ***
     `);
 
   try {
@@ -72,16 +72,9 @@ async function run() {
 
     if (!linkedIssuesCount) {
       const prId = pullRequest?.id;
-      const shouldComment =
-        !linkedIssuesComments.length && core.getInput("comment") && prId;
-
-      if (shouldComment) {
-        const body = core.getInput("custom-body-comment");
-        await addComment({ octokit, prId, body });
-
-        core.debug("Comment added");
-      }
-
+      const body = core.getInput("custom-body-comment");
+      await addComment({ octokit, prId, body });
+      core.debug("Comment added");
       core.setFailed(ERROR_MESSAGE);
     } else if (linkedIssuesComments.length) {
       await deleteLinkedIssueComments(octokit, linkedIssuesComments);
